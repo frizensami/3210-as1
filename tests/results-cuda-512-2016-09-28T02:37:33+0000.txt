@@ -1,5 +1,5 @@
 Usage: ./mm-cuda <size>
 Sequential matrix multiplication of size 512
-Matrix multiplication on CPU took 3.44 seconds
-Matrix multiplication on GPU took 12.45 seconds
+Matrix multiplication on CPU took 5.64 seconds
+Matrix multiplication on GPU took 12.48 seconds
 The result matrices are identical!
