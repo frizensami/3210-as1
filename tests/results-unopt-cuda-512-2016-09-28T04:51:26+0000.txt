@@ -1,5 +1,0 @@
-Usage: ./unopt-mm-cuda <size>
-Sequential matrix multiplication of size 512
-Matrix multiplication on CPU took 5.62 seconds
-Matrix multiplication on GPU took 12.44 seconds
-The result matrices are identical!

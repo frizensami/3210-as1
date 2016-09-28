@@ -6,7 +6,7 @@ mm-seq:  mm-seq.c
 	gcc -O3 mm-seq.c -o mm-seq -lrt
 
 mm-cuda: mm-cuda.cu
-	nvcc -arch=sm_32 mm-cuda.cu -o mm-cuda -lcuda -lcudart
+	nvcc -arch=sm_32 mm-cuda.cu -O3 -o mm-cuda -lcuda -lcudart
 
 unopt-mm-cuda: unopt-mm-cuda.cu
 	nvcc -arch=sm_32 unopt-mm-cuda.cu -o unopt-mm-cuda -lcuda -lcudart

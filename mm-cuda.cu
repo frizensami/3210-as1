@@ -107,6 +107,7 @@ void init_matrix_zero(matrix m)
 /*
    In-place transposes a matrix
 */
+/*
 void transpose_matrix(matrix a) 
 {
     matrix temp;
@@ -117,20 +118,21 @@ void transpose_matrix(matrix a)
 
     for (i = 0; i < size; i++){
         for (j = 0; j < size; j++){ 
-            temp[i][j] = a[i][j];
+            temp.element[i][j] = a.element[i][j];
         }
     }
 
 
     for (i = 0; i < size; i++){
         for (j = 0; j < size; j++){ 
-            a[i][j] = temp[j][i];
+            a.element[i][j] = temp.element[j][i];
         }
     }
    
     free_matrix(&temp);
 
 }
+*/
 
 /**
  * Multiplies matrix @a with matrix @b storing
@@ -147,6 +149,7 @@ void mm(matrix a, matrix b, matrix result)
 	for (i = 0; i < size; i++)
 		for (j = 0; j < size; j++)
 			for(k = 0; k < size; k++)
+		                //result.element[i][j] += a.element[i][k] * b.element[j][k];
 				result.element[i][j] += a.element[i][k] * b.element[k][j];
 }
 
@@ -165,7 +168,8 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 	for(k = 0; k < size; k++)
         {
                 // [k][j] changed to [j][k] for b
-		result.element[i][j] += a.element[i][k] * b.element[j][k];
+		//result.element[i][j] += a.element[i][k] * b.element[j][k];
+		result.element[i][j] += a.element[i][k] * b.element[k][j];
         }
 }
 
@@ -202,8 +206,8 @@ void work()
 	init_matrix(b);
 
         // Transpose the two matrices
-        transpose_matrix(&a);
-        transpose_matrix(&b);
+        //transpose_matrix(a);
+        //transpose_matrix(b);
 
 	// Perform sequential matrix multiplication
 	before = wall_clock_time();
@@ -211,9 +215,10 @@ void work()
 	after = wall_clock_time();
         fprintf(stdout, "Matrix multiplication on CPU took %1.2f seconds\n", ((float)(after - before))/1000000000);
 
+        int length = 8;
 	// Perform CUDA matrix  multiplication
-	dim3 block(8, 8);			// a block of 32 x 32 CUDA threads
-	dim = (size % 8 == 0) ? size / 8 : size / 8 + 1; 
+	dim3 block(length, length);			// a block of 32 x 32 CUDA threads
+	dim = (size % length == 0) ? size / length : size / length + 1; 
 	dim3 grid(dim, dim);	// a grid of CUDA thread blocks
 	before = wall_clock_time();
 	mm_kernel<<<grid, block>>>(a, b, result2, size);
