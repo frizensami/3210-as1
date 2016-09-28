@@ -1,0 +1,6 @@
+Usage: ./mm-cuda <size>
+Sequential matrix multiplication of size 512
+Matrix multiplication on CPU took 3.44 seconds
+Matrix multiplication on GPU took 0.00 seconds
+Last CUDA error invalid configuration argument
+Difference in result matrices at element (1, 0)!
