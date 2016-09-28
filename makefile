@@ -5,3 +5,6 @@ seq:  mm-seq.c
 
 cuda: mm-cuda.cu
 	nvcc -arch=sm_32 mm-cuda.cu -o mm-cuda -lcuda -lcudart
+
+cudatest: cuda
+	./mm-cuda 512 | tee results-cuda-512.txt
