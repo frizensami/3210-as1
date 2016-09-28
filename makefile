@@ -1,9 +1,9 @@
-all: seq cuda
+all:  mm-seq mm-cuda
 
-seq:  mm-seq.c
+mm-seq:  mm-seq.c
 	gcc -O3 mm-seq.c -o mm-seq -lrt
 
-cuda: mm-cuda.cu
+mm-cuda: mm-cuda.cu
 	nvcc -arch=sm_32 mm-cuda.cu -o mm-cuda -lcuda -lcudart
 
 cudatest: cuda
