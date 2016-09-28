@@ -15,7 +15,7 @@ int size;
 
 typedef struct
 {
-	float** element;
+	float ** element;
 } matrix;
 
 
@@ -135,7 +135,7 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 		return;
 
 	for(k = 0; k < size; k++)
-		result.element[i][j] += a.element[i][k] * b.element[k][j];
+		result.element[i][j] +=  b.element[k][j] * a.element[i][k];
 }
 
 void print_matrix(matrix m)
@@ -177,8 +177,8 @@ void work()
         fprintf(stdout, "Matrix multiplication on CPU took %1.2f seconds\n", ((float)(after - before))/1000000000);
 
 	// Perform CUDA matrix  multiplication
-	dim3 block(8, 8);			// a block of 32 x 32 CUDA threads
-	dim = (size % 8 == 0) ? size / 8 : size / 8 + 1; 
+	dim3 block(32, 32);			// a block of 32 x 32 CUDA threads
+	dim = (size % 32 == 0) ? size / 32 : size / 32 + 1; 
 	dim3 grid(dim, dim);	// a grid of CUDA thread blocks
 	before = wall_clock_time();
 	mm_kernel<<<grid, block>>>(a, b, result2, size);
