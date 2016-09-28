@@ -14,3 +14,8 @@ unopt-mm-cuda: unopt-mm-cuda.cu
 cudatest: mm-cuda
 	./mm-cuda 512 | tee tests/results-cuda-512-$(CUDAFILE).txt
 
+unoptcudatest: unopt-mm-cuda
+	./unopt-mm-cuda 512 | tee tests/results-unopt-cuda-512-$(CUDAFILE).txt
+
+compare: mm-cuda unopt-mm-cuda cudatest unoptcudatest
+

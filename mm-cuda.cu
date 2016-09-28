@@ -104,6 +104,34 @@ void init_matrix_zero(matrix m)
 }
 
 
+/*
+   In-place transposes a matrix
+*/
+void transpose_matrix(matrix a) 
+{
+    matrix temp;
+    int i = 0;
+    int j = 0;
+
+    allocate_matrix(&temp);
+
+    for (i = 0; i < size; i++){
+        for (j = 0; j < size; j++){ 
+            temp[i][j] = a[i][j];
+        }
+    }
+
+
+    for (i = 0; i < size; i++){
+        for (j = 0; j < size; j++){ 
+            a[i][j] = temp[j][i];
+        }
+    }
+   
+    free_matrix(&temp);
+
+}
+
 /**
  * Multiplies matrix @a with matrix @b storing
  * the result in matrix @result
@@ -127,7 +155,7 @@ void mm(matrix a, matrix b, matrix result)
  */
 __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 {
-	int i = blockIdx.x * blockDim.x + threadIdx.x; 
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	int j = blockIdx.y * blockDim.y + threadIdx.y;
 	int k;
 
@@ -135,7 +163,10 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 		return;
 
 	for(k = 0; k < size; k++)
-		result.element[i][j] += a.element[i][k] * b.element[k][j];
+        {
+                // [k][j] changed to [j][k] for b
+		result.element[i][j] += a.element[i][k] * b.element[j][k];
+        }
 }
 
 void print_matrix(matrix m)
@@ -169,6 +200,10 @@ void work()
 	// Initialize matrix elements
 	init_matrix(a);
 	init_matrix(b);
+
+        // Transpose the two matrices
+        transpose_matrix(&a);
+        transpose_matrix(&b);
 
 	// Perform sequential matrix multiplication
 	before = wall_clock_time();
