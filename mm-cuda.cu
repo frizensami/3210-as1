@@ -75,33 +75,6 @@ void free_matrix(matrix* m) {
 	cudaFree(m->element);
 }
 
-/*
-void transpose_matrix(matrix a) 
-{
-    matrix temp;
-    int i = 0;
-    int j = 0;
-
-    allocate_matrix(&temp);
-
-    for (i = 0; i < size; i++){
-        for (j = 0; j < size; j++){ 
-            temp.element[i][j] = a.element[i][j];
-        }
-    }
-
-
-    for (i = 0; i < size; i++){
-        for (j = 0; j < size; j++){ 
-            a.element[i][j] = temp.element[j][i];
-        }
-    }
-   
-    free_matrix(&temp);
-
-}
-*/
-
 /**
  * Initializes the elements of the matrix with
  * random values between 0 and 9
@@ -161,8 +134,6 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 	int j = blockIdx.x * blockDim.x + threadIdx.x;
 	int k;
 
-        //printf("Blockidx.x: %d Blockidx.y: %d BlockDim.x %d BlockDim.y %d ThreadIdx.x %d ThreadIdx.y %d --- i: %d, j: %d\n", blockIdx.x, blockIdx.y, blockDim.x, blockDim.y, threadIdx.x, threadIdx.y, i, j);
-
 	if (i >= size || j >= size)
 		return;
 
@@ -203,10 +174,6 @@ void work()
 	// Initialize matrix elements
 	init_matrix(a);
 	init_matrix(b);
-
-        // Transpose the two matrices
-        //transpose_matrix(a);
-        //transpose_matrix(b);
 
 	// Perform sequential matrix multiplication
 	before = wall_clock_time();
