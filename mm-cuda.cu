@@ -158,8 +158,9 @@ void mm(matrix a, matrix b, matrix result)
  */
 __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 {
-	int i = blockIdx.x * blockDim.x + threadIdx.x;
-	int j = blockIdx.y * blockDim.y + threadIdx.y;
+    // all x -> y and vice versa
+	int i = blockIdx.y * blockDim.y + threadIdx.y;
+	int j = blockIdx.x * blockDim.x + threadIdx.x;
 	int k;
 
 	if (i >= size || j >= size)

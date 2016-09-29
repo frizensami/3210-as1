@@ -1,9 +1,12 @@
 CUDAFILE = $(shell date --iso=seconds)
 
-all:  mm-seq mm-cuda unopt-mm-cuda
+all:  mm-seq mm-cuda unopt-mm-cuda mm-omp
 
 mm-seq:  mm-seq.c
 	gcc -O3 mm-seq.c -o mm-seq -lrt
+
+mm-omp: mm-omp.c
+	gcc -O3 -fopenmp mm-omp.c -o mm-omp
 
 mm-cuda: mm-cuda.cu
 	nvcc -arch=sm_32 mm-cuda.cu -O3 -o mm-cuda -lcuda -lcudart
