@@ -104,36 +104,6 @@ void init_matrix_zero(matrix m)
 }
 
 
-/*
-   In-place transposes a matrix
-*/
-/*
-void transpose_matrix(matrix a) 
-{
-    matrix temp;
-    int i = 0;
-    int j = 0;
-
-    allocate_matrix(&temp);
-
-    for (i = 0; i < size; i++){
-        for (j = 0; j < size; j++){ 
-            temp.element[i][j] = a.element[i][j];
-        }
-    }
-
-
-    for (i = 0; i < size; i++){
-        for (j = 0; j < size; j++){ 
-            a.element[i][j] = temp.element[j][i];
-        }
-    }
-   
-    free_matrix(&temp);
-
-}
-*/
-
 /**
  * Multiplies matrix @a with matrix @b storing
  * the result in matrix @result
@@ -149,7 +119,6 @@ void mm(matrix a, matrix b, matrix result)
 	for (i = 0; i < size; i++)
 		for (j = 0; j < size; j++)
 			for(k = 0; k < size; k++)
-		                //result.element[i][j] += a.element[i][k] * b.element[j][k];
 				result.element[i][j] += a.element[i][k] * b.element[k][j];
 }
 
@@ -158,7 +127,7 @@ void mm(matrix a, matrix b, matrix result)
  */
 __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 {
-    // all x -> y and vice versa
+        // all x -> y and vice versa
 	int i = blockIdx.y * blockDim.y + threadIdx.y;
 	int j = blockIdx.x * blockDim.x + threadIdx.x;
 	int k;
@@ -168,8 +137,6 @@ __global__ void mm_kernel(matrix a, matrix b, matrix result, int size)
 
 	for(k = 0; k < size; k++)
         {
-                // [k][j] changed to [j][k] for b
-		//result.element[i][j] += a.element[i][k] * b.element[j][k];
 		result.element[i][j] += a.element[i][k] * b.element[k][j];
         }
 }
@@ -216,7 +183,7 @@ void work()
 	after = wall_clock_time();
         fprintf(stdout, "Matrix multiplication on CPU took %1.2f seconds\n", ((float)(after - before))/1000000000);
 
-        int length = 8;
+        int length = 32;
 	// Perform CUDA matrix  multiplication
 	dim3 block(length, length);			// a block of 32 x 32 CUDA threads
 	dim = (size % length == 0) ? size / length : size / length + 1; 
